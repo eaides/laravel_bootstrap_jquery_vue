@@ -1,0 +1,222 @@
+0.a) laravel new testVue
+0.b) laravel new testReact
+
+For both: add boostrap 4 by sass and Jquery
+
+1) add to package.json
+    "devDependencies": {
+        "axios": "^0.21",
+        "bootstrap": "^4.6.0",
+        "jquery": "^3.6",
+        "laravel-mix": "^6.0.6",
+        "lodash": "^4.17.19",
+        "popper.js": "^1.16.1",
+        "postcss": "^8.1.14",
+	"resolve-url-loader": "^3.1.2",
+        "sass": "^1.32.11",
+        "sass-loader": "^11.0.1"
+    }
+
+yarn install 
+
+2) add to resources/js/bootstrap.js
+
+/**
+ * We'll load jQuery and the Bootstrap jQuery plugin which provides support
+ * for JavaScript based Bootstrap features such as modals and tabs. This
+ * code may be modified to fit the specific needs of your application.
+ */
+
+try {
+    window.Popper = require('popper.js').default;
+    window.$ = window.jQuery = require('jquery');
+
+    require('bootstrap');
+} catch (e) {}
+
+
+3) add to webpack.mix.js
+
+mix.js('resources/js/app.js', 'public/js')
+	.extract([
+		'lodash',
+		'popper',
+		'jquery',
+		'bootstrap',
+	    ])
+    .sass('resources/sass/app.scss', 'public/css')
+    .postCss('resources/css/app.css', 'public/css', [
+        //
+    ])
+    .sourceMaps();
+
+    if (mix.inProduction()) {
+        mix.version();
+    }
+
+4) add to resources/sass
+	_variables.scss	&& app.scss
+
+yarn install
+yarn dev
+
+4) add JS and CSS to the needed html page (welcome.blade.php):
+
+        <!-- Scripts -->
+        <script src="{{ mix('js/manifest.js') }}" defer></script>
+        <script src="{{ mix('js/vendor.js') }}" defer></script>
+        <script src="{{ mix('js/app.js') }}" defer></script>
+
+        <!-- Styles -->
+        <link href="{{ mix('css/app.css') }}" rel="stylesheet">
+
+5) Test jQuery in app.js
+
+require('./bootstrap');
+	console.log($);
+	$( document ).ready(function() {
+   		alert('done by jquery ready');
+	});
+
+
+6) Test in html:  Welcome.blade
+
+        <div class="alert alert-success" role="alert">
+            This is a success alert — boostrap 4 work!
+        </div>
+
+---------------------- VUE 3 ------------------------------------
+https://arter.dev/how-to-install-vue-3-in-laravel-8-from-scratch
+---------------------- VUE 3 ------------------------------------
+
+1) add dependencies
+	yarn add vue@next --dev
+	yarn add @vue/compiler-sfc@next  --dev 
+	yarn add vue-loader@next --dev
+	yarn install
+
+will add to package.json
+        "@vue/compiler-sfc": "^3.1.1",
+        "vue": "^3.1.1",
+        "vue-loader": "^16.2.0"
+
+2) add to webpack.mix.js
+
+mix.js('resources/js/app.js', 'public/js')
+    .vue()							<<<<
+    .extract([
+        'lodash',
+        'popper',
+        'jquery',
+        'bootstrap',
+        'vue'							<<<<
+    ])
+    .sass('resources/sass/app.scss', 'public/css')
+    .postCss('resources/css/app.css', 'public/css', [
+        //
+    ])
+    .sourceMaps();
+
+    if (mix.inProduction()) {
+	mix.version();
+    }
+
+yarn install
+yarn dev
+
+3) Create MainVue 3 entry point
+in /resources/js/		create the component MainVue.vue
+
+	<template>
+	</template>
+
+	<script>
+	export default {}
+	</script>
+
+	<style scoped>
+	</style>
+
+4) Import Vue to the Laravel javascript file, in resources/app.js
+	// VUE
+	import { createApp } from 'vue'
+	import MainVue from './MainVue.vue';
+	const vueApp = createApp({});
+	// registers our components globally
+	vueApp.component('main-vue', MainVue);
+	// mount the app to the DOM
+	vueApp.mount('#mainAppVue');
+
+// vanilla JS
+require('./bootstrap');
+
+5) Use in the blade template:
+
+	<body class="antialiased">
+
+		<div id="mainAppVue">
+		   <main-vue />
+		</div>
+
+		<script src="{{ asset('js/app.js') }}"></script>
+	</body>
+
+--- Create Vue 3 component(s) ---
+
+in /resources/js/components/ create the components like MyComponent.vue
+
+	<template>
+	    <div class="container">
+		<div class="card">
+		    <div class="card-header">
+		        <h5 class="card-title">My Component</h5>
+		    </div>
+		    <div class="card-body">
+		        <p class="card-text">
+		            Componen by {{ author.name }} {{ author.surname }}
+		        </p>
+		    </div>
+		</div>
+	    </div>
+	</template>
+
+	<script>
+	export default {
+	    setup() {
+		const author = {
+		    name: "Ernesto",
+		    surname: "Aides"
+		};
+		return {
+		    author
+		}
+	    }
+	}
+	</script>
+
+	<style scoped>
+	</style>
+
+
+Add it as normal inside MainVue.vue
+
+	<template>
+	    <MyComponent />
+	</template>
+
+	<script>
+	import MyComponent from "./components/MyComponent.vue"
+	export default {
+	    components: {
+		MyComponent
+	    }
+	}
+	</script>
+
+	<style scoped>
+	</style>
+
+---------------------- REACT ------------------------------------
+https://arter.dev/how-to-install-vue-3-in-laravel-8-from-scratch		TODO
+---------------------- REACT ------------------------------------
+
