@@ -19,8 +19,15 @@
                 font-family: 'Nunito', sans-serif;
             }
         </style>
+
+        <!-- Styles -->
+        <link href="{{ mix('css/app.css') }} " rel="stylesheet">
+
     </head>
     <body class="antialiased">
+        <div class="alert alert-success" role="alert">
+            This is a success alert—check it out!
+        </div>
         <div class="relative flex items-top justify-center min-h-screen bg-gray-100 dark:bg-gray-900 sm:items-center py-4 sm:pt-0">
             @if (Route::has('login'))
                 <div class="hidden fixed top-0 right-0 px-6 py-4 sm:block">
@@ -128,5 +135,11 @@
                 </div>
             </div>
         </div>
+
+        <!-- Scripts -->
+        <script src="{{ mix('js/manifest.js') }}" defer></script>
+        <script src="{{ mix('js/vendor.js') }}" defer></script>
+        <script src="{{ mix('js/app.js') }}" defer></script>
+
     </body>
 </html>
